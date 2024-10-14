@@ -6,6 +6,9 @@ public class Reservation {
     private String date;
     private String time;
 
+    public Reservation() {
+    }
+
     public Long getId() {
         return id;
     }
@@ -27,5 +30,9 @@ public class Reservation {
         this.name = name;
         this.date = date;
         this.time = time;
+    }
+
+    public static Reservation toEntity(Long id, Reservation reservation) {
+        return new Reservation(id, reservation.name, reservation.date, reservation.time);
     }
 }
