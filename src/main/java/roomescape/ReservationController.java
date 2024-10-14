@@ -36,10 +36,15 @@ public class ReservationController {
         Reservation reservation = reservations.stream()
                 .filter(it -> Objects.equals(it.getId(), reservationId))
                 .findFirst()
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(IllegalArgumentException::new);
 
         reservations.remove(reservation);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity handleException(IllegalArgumentException e) {
+        return ResponseEntity.badRequest().build();
     }
 }
