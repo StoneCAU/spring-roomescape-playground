@@ -1,7 +1,10 @@
 package roomescape.controller;
 
+import java.sql.PreparedStatement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -28,6 +31,7 @@ public class ReservationController {
     @GetMapping("/reservations")
     public ResponseEntity<List<Reservation>> getReservations() {
         String sql = "select * from reservation";
+
         List<Reservation> reservations = this.jdbcTemplate.query(
                 sql,
                 (resultSet, rowNum) -> {
@@ -47,20 +51,30 @@ public class ReservationController {
 
     @PostMapping("/reservations")
     public ResponseEntity<Reservation> addReservation(@RequestBody Reservation reservation) {
-        Reservation newReservation = Reservation.toEntity(index.getAndIncrement(), reservation);
-        reservations.add(newReservation);
+        String sql = "insert into reservation (name, date, time) values (?, ?, ?)";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(
+                    sql,
+                    new String[]{"id"});
+            ps.setString(1, reservation.getName());
+            ps.setString(2, reservation.getDate());
+            ps.setString(3, reservation.getTime());
+            return ps;
+        }, keyHolder);
+
+        Long id = keyHolder.getKey().longValue();
+
+        Reservation newReservation = new Reservation(id, reservation.getName(), reservation.getDate(), reservation.getTime());
 
         return ResponseEntity.created(URI.create("/reservations/" + newReservation.getId())).body(newReservation);
     }
 
     @DeleteMapping("/reservations/{reservationId}")
     public ResponseEntity<Void> deleteReservation(@PathVariable Long reservationId) {
-        Reservation reservation = reservations.stream()
-                .filter(it -> Objects.equals(it.getId(), reservationId))
-                .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
-
-        reservations.remove(reservation);
+        String sql = "delete from reservation where id = ?";
+        jdbcTemplate.update(sql, reservationId);
 
         return ResponseEntity.noContent().build();
     }
