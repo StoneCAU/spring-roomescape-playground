@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,20 +22,6 @@ public class JdbcTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
-    @BeforeEach
-    public void setUp() {
-        String sql = "CREATE TABLE reservation\n"
-                + "(\n"
-                + "    id      BIGINT       NOT NULL AUTO_INCREMENT,\n"
-                + "    name    VARCHAR(255) NOT NULL,\n"
-                + "    date    VARCHAR(255) NOT NULL,\n"
-                + "    time    VARCHAR(255) NOT NULL,\n"
-                + "    PRIMARY KEY (id)\n"
-                + ");";
-
-        jdbcTemplate.execute(sql);
-    }
 
     @Test
     void 오단계() {
