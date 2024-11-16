@@ -52,9 +52,7 @@ public class TimeController {
             throw new IllegalArgumentException("Invalid time id");
         }
 
-        String sql = "delete from time where id = ?";
-
-        jdbcTemplate.update(sql, timeId);
+        timeService.deleteTime(timeId);
 
         return ResponseEntity.noContent().build();
     }

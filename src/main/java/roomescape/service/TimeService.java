@@ -20,6 +20,11 @@ public class TimeService {
     }
 
     @Transactional
+    public void deleteTime(Long timeId) {
+        timeDao.delete(timeId);
+    }
+
+    @Transactional
     public Time addTime(TimeRequestDto request) {
         Time time = Time.builder()
                 .time(request.time())
