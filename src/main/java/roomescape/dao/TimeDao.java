@@ -44,6 +44,14 @@ public class TimeDao {
                 .stream().findFirst().orElse(null);
     }
 
+    public Time findByTime(String timeString) {
+        String sql = "select * from time where time = ?";
+
+        return jdbcTemplate.query(sql,
+                        (rs,rowNum) -> new Time(rs.getLong("id"), rs.getString("time")), timeString)
+                .stream().findFirst().orElse(null);
+    }
+
     public List<Time> findAll() {
         String sql = "select * from time";
 

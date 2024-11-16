@@ -26,20 +26,7 @@ public class ReservationController {
 
     @GetMapping("/reservations")
     public ResponseEntity<List<Reservation>> getReservations() {
-        String sql = "SELECT \n"
-                + "    r.id as reservation_id, \n"
-                + "    r.name, \n"
-                + "    r.date, \n"
-                + "    t.id as time_id, \n"
-                + "    t.time as time_value \n"
-                + "FROM reservation as r inner join time as t on r.time_id = t.id";
-
-        List<Reservation> reservations = jdbcTemplate.query(sql, (rs, rowNum) -> Reservation.builder()
-                .id(rs.getLong("id"))
-                .name(rs.getString("name"))
-                .date(rs.getString("date"))
-                .time(Time.builder().time(rs.getString("time")).build())
-                .build());
+        List<Reservation> reservations = reservationService.findAll();
 
         return ResponseEntity.ok().body(reservations);
     }

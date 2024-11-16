@@ -1,5 +1,6 @@
 package roomescape.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,11 +17,6 @@ public class ReservationService {
     private final TimeService timeService;
 
     @Transactional
-    public void deleteReservation(Long reservationId) {
-        reservationDao.delete(reservationId);
-    }
-
-    @Transactional
     public Reservation addReservation(ReservationRequestDto request) {
         Time time = timeService.findById(request.time());
         Reservation reservation = Reservation.builder()
@@ -31,5 +27,15 @@ public class ReservationService {
 
         reservationDao.insert(reservation);
         return reservation;
+    }
+
+    @Transactional
+    public void deleteReservation(Long reservationId) {
+        reservationDao.delete(reservationId);
+    }
+
+    @Transactional
+    public List<Reservation> findAll() {
+        return reservationDao.findAll();
     }
 }

@@ -20,8 +20,8 @@ public class TimeService {
     }
 
     @Transactional
-    public void deleteTime(Long timeId) {
-        timeDao.delete(timeId);
+    public Time findByTime(String timeString) {
+        return timeDao.findByTime(timeString);
     }
 
     @Transactional
@@ -32,6 +32,11 @@ public class TimeService {
 
         timeDao.insert(time);
         return time;
+    }
+
+    @Transactional
+    public void deleteTime(Long timeId) {
+        timeDao.delete(timeId);
     }
 
     @Transactional
