@@ -1,4 +1,4 @@
-package roomescape.dto.request;
+package roomescape.dto;
 
 public record TimeRequestDto(
         String time

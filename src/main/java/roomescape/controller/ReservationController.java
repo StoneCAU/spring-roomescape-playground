@@ -9,8 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import roomescape.domain.Reservation;
-import roomescape.domain.Time;
-import roomescape.dto.request.ReservationRequestDto;
+import roomescape.dto.ReservationRequestDto;
 import roomescape.service.ReservationService;
 
 @Controller

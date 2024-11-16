@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import roomescape.dao.ReservationDao;
 import roomescape.domain.Reservation;
 import roomescape.domain.Time;
-import roomescape.dto.request.ReservationRequestDto;
+import roomescape.dto.ReservationRequestDto;
 
 @Service
 @RequiredArgsConstructor
