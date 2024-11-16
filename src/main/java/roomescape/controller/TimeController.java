@@ -31,7 +31,6 @@ public class TimeController {
 
     @PostMapping("/times")
     public ResponseEntity<Time> addTime(@RequestBody TimeRequestDto request) {
-
         Time newTime = timeService.addTime(request);
 
         return ResponseEntity.created(URI.create("/times/" + newTime.getId())).body(newTime);
@@ -39,13 +38,6 @@ public class TimeController {
 
     @DeleteMapping("/times/{timeId}")
     public ResponseEntity<Time> deleteTime(@PathVariable Long timeId) {
-//        String valid = "select count(*) from time where id = ?";
-//        Integer count = jdbcTemplate.queryForObject(valid, Integer.class, timeId);
-//
-//        if (count == null || count == 0) {
-//            throw new IllegalArgumentException("Invalid time id");
-//        }
-
         timeService.deleteTime(timeId);
 
         return ResponseEntity.noContent().build();

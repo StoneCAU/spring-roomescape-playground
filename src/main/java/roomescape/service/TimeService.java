@@ -26,6 +26,8 @@ public class TimeService {
 
     @Transactional
     public Time addTime(TimeRequestDto request) {
+        validate(request.time());
+
         Time time = Time.builder()
                 .time(request.time())
                 .build();
@@ -36,12 +38,22 @@ public class TimeService {
 
     @Transactional
     public void deleteTime(Long timeId) {
+        if (timeDao.findById(timeId) == null) {
+            throw new IllegalArgumentException("해당 시간이 존재하지 않습니다");
+        }
+
         timeDao.delete(timeId);
     }
 
     @Transactional
     public List<Time> findAll() {
         return timeDao.findAll();
+    }
+
+    private void validate(String timeString) {
+        if (timeString.isEmpty()) {
+            throw new IllegalArgumentException("시간을 입력해주세요");
+        }
     }
 
 }
