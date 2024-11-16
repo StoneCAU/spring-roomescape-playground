@@ -1,5 +1,6 @@
 package roomescape.controller;
 
+import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -53,7 +54,9 @@ public class ReservationController {
             throw new IllegalArgumentException("Valid Input");
         }
 
-        return ResponseEntity.ok().body(reservationService.addReservation(request));
+        Reservation newReservation = reservationService.addReservation(request);
+
+        return ResponseEntity.created(URI.create("/reservations/" + newReservation.getId())).body(newReservation);
     }
 
     @DeleteMapping("/reservations/{reservationId}")
