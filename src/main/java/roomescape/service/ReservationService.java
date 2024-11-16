@@ -33,9 +33,7 @@ public class ReservationService {
 
     @Transactional
     public void deleteReservation(Long reservationId) {
-        if (reservationDao.findById(reservationId) == null) {
-            throw new IllegalArgumentException("해당 예약이 존재하지 않습니다");
-        }
+        validateReservation(reservationId);
 
         reservationDao.delete(reservationId);
     }
@@ -66,6 +64,12 @@ public class ReservationService {
     private void validateTime(Long time) {
         if (time == null) {
             throw new IllegalArgumentException("시간을 입력해주세요");
+        }
+    }
+
+    private void validateReservation(Long reservationId) {
+        if (reservationDao.findById(reservationId) == null) {
+            throw new IllegalArgumentException("해당 예약이 존재하지 않습니다");
         }
     }
 }
