@@ -15,13 +15,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import roomescape.domain.Time;
-import roomescape.dto.TimeRequestDto;
+import roomescape.dto.request.TimeRequestDto;
+import roomescape.service.TimeService;
 
 @Controller
 @RequiredArgsConstructor
 public class TimeController {
 
     private final JdbcTemplate jdbcTemplate;
+    private final TimeService timeService;
 
     @GetMapping("/time")
     public String time() {
@@ -44,27 +46,8 @@ public class TimeController {
 
     @PostMapping("/times")
     public ResponseEntity<Time> addTime(@RequestBody TimeRequestDto request) {
-        if (request.time() == null) {
-            throw new IllegalArgumentException("Time must not be null");
-        }
 
-        String sql = "insert into time (time) values ?";
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(
-                    sql,
-                    new String[]{"id"});
-            ps.setString(1, request.time());
-            return ps;
-        }, keyHolder);
-
-        Long id = keyHolder.getKey().longValue();
-
-        Time newTime = Time.builder()
-                .id(id)
-                .time(request.time())
-                .build();
+        Time newTime = timeService.addTime(request);
 
         return ResponseEntity.created(URI.create("/times/" + newTime.getId())).body(newTime);
     }
