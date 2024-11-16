@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +14,6 @@ import roomescape.service.ReservationService;
 @Controller
 @RequiredArgsConstructor
 public class ReservationController {
-    private final JdbcTemplate jdbcTemplate;
     private final ReservationService reservationService;
 
     @GetMapping("/reservation")
@@ -47,12 +45,12 @@ public class ReservationController {
 
     @DeleteMapping("/reservations/{reservationId}")
     public ResponseEntity<Void> deleteReservation(@PathVariable Long reservationId) {
-        String valid = "select count(*) from reservation where id = ?";
-        Integer count = jdbcTemplate.queryForObject(valid, Integer.class, reservationId);
-
-        if (count == null || count == 0) {
-            throw new IllegalArgumentException("Invalid reservation");
-        }
+//        String valid = "select count(*) from reservation where id = ?";
+//        Integer count = jdbcTemplate.queryForObject(valid, Integer.class, reservationId);
+//
+//        if (count == null || count == 0) {
+//            throw new IllegalArgumentException("Invalid reservation");
+//        }
 
         reservationService.deleteReservation(reservationId);
 

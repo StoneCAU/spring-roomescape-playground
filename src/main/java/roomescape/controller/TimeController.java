@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +17,6 @@ import roomescape.service.TimeService;
 @Controller
 @RequiredArgsConstructor
 public class TimeController {
-
-    private final JdbcTemplate jdbcTemplate;
     private final TimeService timeService;
 
     @GetMapping("/time")
@@ -42,12 +39,12 @@ public class TimeController {
 
     @DeleteMapping("/times/{timeId}")
     public ResponseEntity<Time> deleteTime(@PathVariable Long timeId) {
-        String valid = "select count(*) from time where id = ?";
-        Integer count = jdbcTemplate.queryForObject(valid, Integer.class, timeId);
-
-        if (count == null || count == 0) {
-            throw new IllegalArgumentException("Invalid time id");
-        }
+//        String valid = "select count(*) from time where id = ?";
+//        Integer count = jdbcTemplate.queryForObject(valid, Integer.class, timeId);
+//
+//        if (count == null || count == 0) {
+//            throw new IllegalArgumentException("Invalid time id");
+//        }
 
         timeService.deleteTime(timeId);
 
