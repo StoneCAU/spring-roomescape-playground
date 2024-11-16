@@ -2,6 +2,7 @@ package roomescape.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -29,5 +30,16 @@ public class TimeDao {
             ps.setString(1, time.getTime());
             return ps;
         });
+    }
+
+    public List<Time> findAll() {
+        String sql = "select * from time";
+
+        return jdbcTemplate.query(
+                sql,
+                (resultSet, rowNum) -> Time.builder()
+                        .id(resultSet.getLong("id"))
+                        .time(resultSet.getString("time"))
+                        .build());
     }
 }

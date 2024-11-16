@@ -32,16 +32,7 @@ public class TimeController {
 
     @GetMapping("/times")
     public ResponseEntity<List<Time>> getTimes() {
-        String sql = "select * from time";
-
-        List<Time> times = this.jdbcTemplate.query(
-                sql,
-                (resultSet, rowNum) -> Time.builder()
-                        .id(resultSet.getLong("id"))
-                        .time(resultSet.getString("time"))
-                        .build());
-
-        return ResponseEntity.ok().body(times);
+        return ResponseEntity.ok().body(timeService.findAll());
     }
 
     @PostMapping("/times")
