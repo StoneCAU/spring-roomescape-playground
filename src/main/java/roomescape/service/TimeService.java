@@ -1,5 +1,6 @@
 package roomescape.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,11 @@ public class TimeService {
 
         timeDao.insert(time);
         return time;
+    }
+
+    @Transactional
+    public List<Time> findAll() {
+        return timeDao.findAll();
     }
 
 }
