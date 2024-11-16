@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Reservation {
-    Long id;
-    String name;
-    String date;
-    String time;
+    private Long id;
+    private String name;
+    private String date;
+    private Time time;
 }

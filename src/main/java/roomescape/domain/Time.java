@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Time {
-    Long id;
-    String time;
+    private Long id;
+    private String time;
 }
