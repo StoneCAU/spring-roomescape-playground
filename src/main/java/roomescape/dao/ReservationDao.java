@@ -58,4 +58,17 @@ public class ReservationDao {
                 .time(timeService.findByTime(rs.getString("time_value")))
                 .build());
     }
+
+    public Reservation findById(Long reservationId) {
+        String sql = "select * from reservation where id = ?";
+
+        return jdbcTemplate.query(sql,
+                        (rs, rowNum) -> Reservation.builder()
+                                .id(rs.getLong("id"))
+                                .name(rs.getString("name"))
+                                .date(rs.getString("date"))
+                                .time(timeService.findByTime(rs.getString("time_value")))
+                                .build(), reservationId)
+                .stream().findFirst().orElse(null);
+    }
 }

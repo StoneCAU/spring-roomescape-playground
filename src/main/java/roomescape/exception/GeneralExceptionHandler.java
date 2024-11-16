@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GeneralExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Void> handleException(IllegalArgumentException e) {
-        return ResponseEntity.badRequest().build();
+    public ResponseEntity<String> handleException(IllegalArgumentException e) {
+        return ResponseEntity.badRequest().body("[ERROR]" + e.getMessage());
     }
 }
