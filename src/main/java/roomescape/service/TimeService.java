@@ -38,9 +38,7 @@ public class TimeService {
 
     @Transactional
     public void deleteTime(Long timeId) {
-        if (timeDao.findById(timeId) == null) {
-            throw new IllegalArgumentException("해당 시간이 존재하지 않습니다");
-        }
+        validateTime(timeId);
 
         timeDao.delete(timeId);
     }
@@ -53,6 +51,12 @@ public class TimeService {
     private void validate(String timeString) {
         if (timeString.isEmpty()) {
             throw new IllegalArgumentException("시간을 입력해주세요");
+        }
+    }
+
+    private void validateTime(Long timeId) {
+        if (timeDao.findById(timeId) == null) {
+            throw new IllegalArgumentException("해당 시간이 존재하지 않습니다");
         }
     }
 
