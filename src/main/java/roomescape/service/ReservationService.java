@@ -16,6 +16,11 @@ public class ReservationService {
     private final TimeService timeService;
 
     @Transactional
+    public void deleteReservation(Long reservationId) {
+        reservationDao.delete(reservationId);
+    }
+
+    @Transactional
     public Reservation addReservation(ReservationRequestDto request) {
         Time time = timeService.findById(request.time());
         Reservation reservation = Reservation.builder()

@@ -68,9 +68,7 @@ public class ReservationController {
             throw new IllegalArgumentException("Invalid reservation");
         }
 
-        String sql = "delete from reservation where id = ?";
-
-        jdbcTemplate.update(sql, reservationId);
+        reservationService.deleteReservation(reservationId);
 
         return ResponseEntity.noContent().build();
     }
