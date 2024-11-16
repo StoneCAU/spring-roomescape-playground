@@ -1,26 +1,22 @@
 package roomescape.controller;
 
-import java.sql.PreparedStatement;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
-import java.util.*;
 import roomescape.domain.Reservation;
 import roomescape.domain.Time;
-import roomescape.dto.ReservationRequestDto;
+import roomescape.dto.request.ReservationRequestDto;
+import roomescape.service.ReservationService;
 
 @Controller
 @RequiredArgsConstructor
 public class ReservationController {
     private final JdbcTemplate jdbcTemplate;
+    private final ReservationService reservationService;
 
     @GetMapping("/reservation")
     public String reservation() {
@@ -57,42 +53,7 @@ public class ReservationController {
             throw new IllegalArgumentException("Valid Input");
         }
 
-        // time 찾기
-        Long timeId = Long.parseLong(request.time());
-        String findTimeSql = "SELECT * from time where id = ?";
-        Time time = null;
-        try {
-            time = jdbcTemplate.queryForObject(findTimeSql, new Object[]{timeId}, new BeanPropertyRowMapper<>(Time.class));
-        } catch (EmptyResultDataAccessException e) {
-            throw new IllegalArgumentException("Time with ID " + timeId + " not found.");
-        }
-
-
-        // reservation 추가
-        String insertSql = "INSERT INTO reservation (name, date, time_id) VALUES (?, ?, ?)";
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(insertSql, new String[]{"id"});
-            ps.setString(1, request.name());
-            ps.setString(2, request.date());
-            ps.setLong(3, timeId);
-            return ps;
-        }, keyHolder);
-
-        Long id = keyHolder.getKey().longValue();
-
-        Reservation newReservation = Reservation.builder()
-                .id(id)
-                .name(request.name())
-                .date(request.date())
-                .time(Time.builder()
-                        .id(timeId)
-                        .time(time.getTime())
-                        .build())
-                .build();
-
-        return ResponseEntity.created(URI.create("/reservations/" + newReservation.getId())).body(newReservation);
+        return ResponseEntity.ok().body(reservationService.addReservation(request));
     }
 
     @DeleteMapping("/reservations/{reservationId}")

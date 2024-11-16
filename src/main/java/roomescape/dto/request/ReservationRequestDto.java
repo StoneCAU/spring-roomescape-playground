@@ -1,8 +1,8 @@
-package roomescape.dto;
+package roomescape.dto.request;
 
 public record ReservationRequestDto(
         String name,
         String date,
-        String time
+        Long time
 ) {
 }
