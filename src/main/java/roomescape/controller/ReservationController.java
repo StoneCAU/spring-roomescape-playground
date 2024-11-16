@@ -1,6 +1,7 @@
 package roomescape.controller;
 
 import java.sql.PreparedStatement;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -10,19 +11,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicLong;
 import roomescape.domain.Reservation;
 import roomescape.dto.ReservationRequestDto;
 
 @Controller
+@RequiredArgsConstructor
 public class ReservationController {
-    private final List<Reservation> reservations = new ArrayList<>();
-    private final AtomicLong index = new AtomicLong(1);
     private final JdbcTemplate jdbcTemplate;
-
-    public ReservationController(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     @GetMapping("/reservation")
     public String reservation() {
