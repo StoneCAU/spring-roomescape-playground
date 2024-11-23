@@ -1,7 +1,6 @@
 package roomescape.dao;
 
 import java.sql.PreparedStatement;
-import java.sql.Statement;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -9,7 +8,6 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import roomescape.domain.Reservation;
-import roomescape.domain.Time;
 import roomescape.service.TimeService;
 
 @RequiredArgsConstructor
@@ -43,14 +41,17 @@ public class ReservationDao {
     }
 
     public List<Reservation> findAll() {
-        String sql = "SELECT \n"
-                + "    r.id as reservation_id, \n"
-                + "    r.name, \n"
-                + "    r.date, \n"
-                + "    t.id as time_id, \n"
-                + "    t.time as time_value \n"
-                + "FROM reservation as r inner join time as t on r.time_id = t.id";
-
+        String sql = """
+                SELECT 
+                    r.id as reservation_id, 
+                    r.name, 
+                    r.date, 
+                    t.id as time_id, 
+                    t.time as time_value 
+                FROM reservation as r 
+                INNER JOIN time as t 
+                ON r.time_id = t.id
+                """;
         return jdbcTemplate.query(sql, (rs, rowNum) -> Reservation.builder()
                 .id(rs.getLong("id"))
                 .name(rs.getString("name"))
