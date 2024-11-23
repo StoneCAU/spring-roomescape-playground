@@ -2,6 +2,7 @@ package roomescape.dao;
 
 import java.sql.PreparedStatement;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -36,20 +37,20 @@ public class TimeDao {
         jdbcTemplate.update(sql, timeId);
     }
 
-    public Time findById(Long timeId) {
+    public Optional<Time> findById(Long timeId) {
         String sql = "select * from time where id = ?";
 
         return jdbcTemplate.query(sql,
                 (rs,rowNum) -> new Time(rs.getLong("id"), rs.getString("time")), timeId)
-                .stream().findFirst().orElse(null);
+                .stream().findFirst();
     }
 
-    public Time findByTime(String timeString) {
+    public Optional<Time> findByTime(String timeString) {
         String sql = "select * from time where time = ?";
 
         return jdbcTemplate.query(sql,
                         (rs,rowNum) -> new Time(rs.getLong("id"), rs.getString("time")), timeString)
-                .stream().findFirst().orElse(null);
+                .stream().findFirst();
     }
 
     public List<Time> findAll() {

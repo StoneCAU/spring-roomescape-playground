@@ -1,8 +1,8 @@
 package roomescape.dto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
 public record TimeRequestDto(
-        @NotNull String time
+        @NotBlank String time
 ) {
 }
