@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import roomescape.dao.TimeDao;
 import roomescape.domain.Time;
 import roomescape.dto.TimeRequestDto;
+import roomescape.dto.TimeResponseDto;
 import roomescape.exception.ErrorMessage;
 import roomescape.exception.GeneralException;
 
@@ -18,13 +19,13 @@ public class TimeService {
     private final TimeDao timeDao;
 
     @Transactional
-    public Time addTime(TimeRequestDto request) {
+    public TimeResponseDto addTime(TimeRequestDto request) {
         Time time = Time.builder()
                 .time(request.time())
                 .build();
 
         timeDao.insert(time);
-        return time;
+        return TimeResponseDto.from(time);
     }
 
     @Transactional
@@ -41,7 +42,9 @@ public class TimeService {
         return timeDao.findByTime(timeString).orElseThrow(() -> new GeneralException(ErrorMessage.NOT_FOUND_TIME.getMessage()));
     }
 
-    public List<Time> findAll() {
-        return timeDao.findAll();
+    public List<TimeResponseDto> findAll() {
+        return timeDao.findAll().stream()
+                .map(TimeResponseDto::from)
+                .toList();
     }
 }

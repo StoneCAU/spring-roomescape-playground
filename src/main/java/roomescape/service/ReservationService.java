@@ -8,6 +8,7 @@ import roomescape.dao.ReservationDao;
 import roomescape.domain.Reservation;
 import roomescape.domain.Time;
 import roomescape.dto.ReservationRequestDto;
+import roomescape.dto.ReservationResponseDto;
 import roomescape.exception.ErrorMessage;
 import roomescape.exception.GeneralException;
 
@@ -19,7 +20,7 @@ public class ReservationService {
     private final TimeService timeService;
 
     @Transactional
-    public Reservation addReservation(ReservationRequestDto request) {
+    public ReservationResponseDto addReservation(ReservationRequestDto request) {
 
         Time time = timeService.findById(request.time());
         Reservation reservation = Reservation.builder()
@@ -29,7 +30,7 @@ public class ReservationService {
                 .build();
 
         reservationDao.insert(reservation);
-        return reservation;
+        return ReservationResponseDto.from(reservation);
     }
 
     @Transactional
@@ -42,7 +43,9 @@ public class ReservationService {
         return reservationDao.findById(reservationId).orElseThrow(() -> new GeneralException(ErrorMessage.NOT_FOUND_RESERVATION.getMessage()));
     }
 
-    public List<Reservation> findAll() {
-        return reservationDao.findAll();
+    public List<ReservationResponseDto> findAll() {
+        return reservationDao.findAll().stream()
+                .map(ReservationResponseDto::from)
+                .toList();
     }
 }
